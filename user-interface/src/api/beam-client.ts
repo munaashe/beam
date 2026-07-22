@@ -1,17 +1,33 @@
+import { deriveBackendSupport, mirrorForBackend, unmirrorResult } from "../lib/beam-validation";
 import type { BeamDesignResponse, BeamInput } from "../types/beam";
 
+
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
+
 export async function designBeam(input: BeamInput): Promise<BeamDesignResponse> {
-  // Strip the client-only `id` field before sending.
+  const config = deriveBackendSupport(input.supports, input.spanLength);
+  if ("error" in config) throw new Error(config.error);
+
+  const mirrored = mirrorForBackend(input, config.fixedAtB);
+
   const wireInput = {
-    ...input,
-    loads: input.loads.map((load) => ({
+    schemaVersion: 1,
+    designCode: input.designCode,
+    support: config.supportType,
+    spanLength: mirrored.spanLength,
+    section: input.section,
+    fck: input.fck,
+    fyk: input.fyk,
+    torsion: input.torsion,
+    loads: mirrored.loads.map((load) => ({
       type: load.type,
       magnitude: load.magnitude,
       position: load.position,
+      length: load.length,
     })),
   };
 
-  const res = await fetch("/api/beam/design", {
+  const res = await fetch(`${API_BASE}/beam/design`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(wireInput),
@@ -22,5 +38,6 @@ export async function designBeam(input: BeamInput): Promise<BeamDesignResponse> 
     throw new Error(body?.error ?? `Request failed (${res.status})`);
   }
 
-  return res.json() as Promise<BeamDesignResponse>;
+  const response = (await res.json()) as BeamDesignResponse;
+  return { ...response, analysis: unmirrorResult(response.analysis, config.fixedAtB, input.spanLength) };
 }

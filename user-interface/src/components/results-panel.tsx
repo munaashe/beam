@@ -35,7 +35,7 @@ export function ResultsPanel({ result }: { result: BeamDesignResponse }) {
 
   return (
     <div className="space-y-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-slate-800">Results</h2>
+      <h2 className="text-lg font-semibold text-slate-800">Design</h2>
 
       <section className="grid grid-cols-2 gap-3 text-sm text-slate-700 sm:grid-cols-4">
         <div>
