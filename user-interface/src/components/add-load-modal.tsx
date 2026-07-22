@@ -3,6 +3,7 @@ import { LOAD_TYPE_OPTIONS } from "../hooks/use-beam-model";
 import type { ValidationOutcome } from "../lib/beam-validation";
 import type { LoadType } from "../types/beam";
 import { Modal } from "./modal";
+import { NumberInput } from "./number-input";
 
 const inputClass = "mt-1 rounded border border-slate-300 px-2 py-1";
 const labelClass = "flex flex-col text-sm text-slate-600";
@@ -56,12 +57,7 @@ export function AddLoadModal({ spanLength, onAdd, onClose }: AddLoadModalProps) 
 
         <label className={labelClass}>
           Magnitude
-          <input
-            type="number"
-            className={inputClass}
-            value={magnitude}
-            onChange={(e) => setMagnitude(Number(e.target.value))}
-          />
+          <NumberInput className={inputClass} value={magnitude} onChange={setMagnitude} />
         </label>
 
         {isUdl && (
@@ -74,28 +70,14 @@ export function AddLoadModal({ spanLength, onAdd, onClose }: AddLoadModalProps) 
         {(!isUdl || isPartialUdl) && (
           <label className={labelClass}>
             Distance from A (m)
-            <input
-              type="number"
-              className={inputClass}
-              value={position}
-              min={0}
-              max={spanLength}
-              onChange={(e) => setPosition(Number(e.target.value))}
-            />
+            <NumberInput className={inputClass} value={position} onChange={setPosition} min={0} max={spanLength} />
           </label>
         )}
 
         {isPartialUdl && (
           <label className={labelClass}>
             Length (m)
-            <input
-              type="number"
-              className={inputClass}
-              value={length}
-              min={0}
-              max={spanLength}
-              onChange={(e) => setLength(Number(e.target.value))}
-            />
+            <NumberInput className={inputClass} value={length} onChange={setLength} min={0} max={spanLength} />
           </label>
         )}
 

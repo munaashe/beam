@@ -3,6 +3,7 @@ import { SUPPORT_KIND_OPTIONS } from "../hooks/use-beam-model";
 import type { ValidationOutcome } from "../lib/beam-validation";
 import type { SupportItem, SupportKind } from "../types/beam";
 import { Modal } from "./modal";
+import { NumberInput } from "./number-input";
 
 const inputClass = "mt-1 rounded border border-slate-300 px-2 py-1";
 const labelClass = "flex flex-col text-sm text-slate-600";
@@ -51,14 +52,7 @@ export function AddSupportModal({ spanLength, support, onSubmit, onClose }: AddS
 
         <label className={labelClass}>
           Distance from A (m)
-          <input
-            type="number"
-            className={inputClass}
-            value={position}
-            min={0}
-            max={spanLength}
-            onChange={(e) => setPosition(Number(e.target.value))}
-          />
+          <NumberInput className={inputClass} value={position} onChange={setPosition} min={0} max={spanLength} />
         </label>
 
         {otherSupportsWillBeRemoved && (
