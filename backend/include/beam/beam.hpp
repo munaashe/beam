@@ -51,4 +51,4 @@ private:
     DesignCode designCode_ = DesignCode::EC2;
 };
 
-} // namespace beam
+}

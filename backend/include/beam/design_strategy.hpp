@@ -37,4 +37,4 @@ public:
 
 std::unique_ptr<DesignStrategy> makeDesignStrategy(DesignCode code);
 
-} // namespace beam
+}

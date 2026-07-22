@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace beam {
 
@@ -10,6 +11,12 @@ struct AnalysisResult {
     double maxMoment_kNm = 0.0;     // governing design moment magnitude
     double maxShear_kN = 0.0;       // governing design shear magnitude
     double torsion_kNm = 0.0;       // directly-entered applied design torsion
+
+    // Sampled shear/moment diagrams along the span, x measured from the same
+    // origin as the analysis, for plotting SFD/BMD.
+    std::vector<double> diagramX_m;
+    std::vector<double> diagramShear_kN;
+    std::vector<double> diagramMoment_kNm;
 };
 
 // One capacity check: a demand compared against a code-calculated capacity.
@@ -31,4 +38,4 @@ struct DesignResult {
 std::string toJson(const AnalysisResult& result);
 std::string toJson(const DesignResult& result);
 
-} // namespace beam
+}

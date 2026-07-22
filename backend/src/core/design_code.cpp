@@ -18,4 +18,4 @@ DesignCode designCodeFromString(const std::string& value) {
     throw std::invalid_argument("Unknown design code: " + value);
 }
 
-} // namespace beam
+}

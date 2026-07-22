@@ -20,4 +20,4 @@ LoadType loadTypeFromString(const std::string& value) {
     throw std::invalid_argument("Unknown load type: " + value);
 }
 
-} // namespace beam
+}

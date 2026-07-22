@@ -12,4 +12,4 @@ enum class DesignCode {
 std::string toString(DesignCode code);
 DesignCode designCodeFromString(const std::string& value);
 
-} // namespace beam
+}

@@ -83,7 +83,7 @@ std::vector<std::string> splitTopLevelObjects(const std::string& arrayBody) {
     return objects;
 }
 
-} // namespace
+}
 
 AnalysisResult Beam::analyze() const {
     return ::beam::analyze(span_m_, support_, loadCase_);
@@ -121,7 +121,8 @@ std::string Beam::toJson() const {
         const auto& load = loads[i];
         out << "    { \"type\": \"" << ::beam::toString(load.type)
             << "\", \"magnitude\": " << load.magnitude
-            << ", \"position\": " << load.position_m << " }";
+            << ", \"position\": " << load.position_m
+            << ", \"length\": " << load.length_m << " }";
         if (i + 1 < loads.size()) out << ",";
         out << "\n";
     }
@@ -156,6 +157,9 @@ Beam Beam::fromJson(const std::string& json) {
         load.type = loadTypeFromString(extractString(obj, "type"));
         load.magnitude = extractNumber(obj, "magnitude");
         load.position_m = hasField(obj, "position") ? extractNumber(obj, "position") : 0.0;
+        // Missing "length" (older files) means the UDL spans the full beam.
+        load.length_m = hasField(obj, "length") ? extractNumber(obj, "length")
+                       : (load.type == LoadType::UDL ? result.span() : 0.0);
         loadCase.addLoad(load);
     }
     result.setLoadCase(loadCase);
@@ -177,4 +181,4 @@ Beam Beam::load(const std::string& path) {
     return fromJson(buffer.str());
 }
 
-} // namespace beam
+}

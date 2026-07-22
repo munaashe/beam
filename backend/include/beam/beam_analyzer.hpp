@@ -10,4 +10,4 @@ namespace beam {
 // supported or cantilever) - code-independent, shared by every design strategy.
 AnalysisResult analyze(double span_m, SupportType support, const LoadCase& loadCase);
 
-} // namespace beam
+}

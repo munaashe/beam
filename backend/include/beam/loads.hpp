@@ -6,7 +6,7 @@
 namespace beam {
 
 enum class LoadType {
-    UDL,          // uniformly distributed load over the full span, kN/m
+    UDL,          // uniformly distributed load, kN/m, over [position_m, position_m + length_m]
     PointLoad,    // kN, at `position_m` from the left/fixed support
     PointMoment,  // kNm, applied at `position_m`
 };
@@ -18,7 +18,8 @@ LoadType loadTypeFromString(const std::string& value);
 struct Load {
     LoadType type = LoadType::UDL;
     double magnitude = 0.0;   // kN/m, kN or kNm depending on `type`
-    double position_m = 0.0;  // ignored for UDL (assumed full span)
+    double position_m = 0.0;  // UDL: start of the loaded region; otherwise the load's position
+    double length_m = 0.0;    // UDL only: length of the loaded region starting at position_m
 };
 
 // Applied loads plus a directly-entered design torsion (not derived from
@@ -36,4 +37,4 @@ private:
     double designTorsion_kNm_ = 0.0;
 };
 
-} // namespace beam
+}

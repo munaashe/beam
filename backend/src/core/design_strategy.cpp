@@ -324,7 +324,7 @@ public:
     }
 };
 
-} // namespace
+}
 
 std::unique_ptr<DesignStrategy> makeDesignStrategy(DesignCode code) {
     switch (code) {
@@ -334,4 +334,4 @@ std::unique_ptr<DesignStrategy> makeDesignStrategy(DesignCode code) {
     return nullptr;
 }
 
-} // namespace beam
+}

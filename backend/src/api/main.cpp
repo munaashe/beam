@@ -1,6 +1,7 @@
 #include <array>
 #include <cerrno>
 #include <csignal>
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -19,6 +20,17 @@ volatile std::sig_atomic_t keepRunning = 1;
 
 void handleSignal(int) {
     keepRunning = 0;
+}
+
+int resolvePort() {
+    if (const char* env = std::getenv("PORT")) {
+        try {
+            return std::stoi(env);
+        } catch (const std::exception&) {
+            std::cerr << "Ignoring invalid PORT value: " << env << "\n";
+        }
+    }
+    return 8080;
 }
 
 struct Request {
@@ -115,13 +127,13 @@ std::string handleRequest(const Request& request) {
     return buildResponse(404, "Not Found", errorJson("Not found: " + request.method + " " + request.path));
 }
 
-} // namespace
+}
 
 int main() {
     std::signal(SIGINT, handleSignal);
     std::signal(SIGTERM, handleSignal);
 
-    constexpr int port = 8080;
+    const int port = resolvePort();
 
     const int serverFd = ::socket(AF_INET, SOCK_STREAM, 0);
     if (serverFd < 0) {

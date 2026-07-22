@@ -18,4 +18,4 @@ SupportType supportTypeFromString(const std::string& value) {
     throw std::invalid_argument("Unknown support type: " + value);
 }
 
-} // namespace beam
+}

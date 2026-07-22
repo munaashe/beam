@@ -16,6 +16,17 @@ std::string escape(const std::string& value) {
     return out;
 }
 
+std::string toJsonArray(const std::vector<double>& values) {
+    std::ostringstream out;
+    out << "[";
+    for (size_t i = 0; i < values.size(); ++i) {
+        if (i > 0) out << ", ";
+        out << values[i];
+    }
+    out << "]";
+    return out.str();
+}
+
 std::string toJson(const CheckResult& check) {
     std::ostringstream out;
     out << "{ \"name\": \"" << escape(check.name) << "\""
@@ -28,7 +39,7 @@ std::string toJson(const CheckResult& check) {
     return out.str();
 }
 
-} // namespace
+}
 
 std::string toJson(const AnalysisResult& result) {
     std::ostringstream out;
@@ -37,6 +48,9 @@ std::string toJson(const AnalysisResult& result) {
         << ", \"maxMoment\": " << result.maxMoment_kNm
         << ", \"maxShear\": " << result.maxShear_kN
         << ", \"torsion\": " << result.torsion_kNm
+        << ", \"diagramX\": " << toJsonArray(result.diagramX_m)
+        << ", \"diagramShear\": " << toJsonArray(result.diagramShear_kN)
+        << ", \"diagramMoment\": " << toJsonArray(result.diagramMoment_kNm)
         << " }";
     return out.str();
 }
@@ -50,4 +64,4 @@ std::string toJson(const DesignResult& result) {
     return out.str();
 }
 
-} // namespace beam
+}

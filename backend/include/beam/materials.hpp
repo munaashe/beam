@@ -12,4 +12,4 @@ struct SteelMaterial {
     double fyk_MPa = 500.0;
 };
 
-} // namespace beam
+}

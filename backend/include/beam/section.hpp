@@ -12,4 +12,4 @@ struct Section {
     double grossArea() const { return width_mm * depth_mm; }
 };
 
-} // namespace beam
+}

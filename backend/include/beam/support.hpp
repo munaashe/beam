@@ -12,4 +12,4 @@ enum class SupportType {
 std::string toString(SupportType support);
 SupportType supportTypeFromString(const std::string& value);
 
-} // namespace beam
+}
