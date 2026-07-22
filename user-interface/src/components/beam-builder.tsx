@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { useBeamModel } from "../hooks/use-beam-model";
 import { AddLoadModal } from "./add-load-modal";
 import { AddSupportModal } from "./add-support-modal";
 import { BeamDiagram } from "./beam-diagram";
+import { NumberInput } from "./number-input";
 
 type BeamModelHook = ReturnType<typeof useBeamModel>;
 
@@ -39,29 +40,6 @@ export function BeamBuilder({
   const [showLoadModal, setShowLoadModal] = useState(false);
   const editingSupport = beamInput.supports.find((s) => s.id === editingSupportId);
 
-  // Decoupled from spanLength so transient empty/zero states while typing
-  // never reach updateSpanLength (a zero-length span breaks support tracking).
-  const [spanText, setSpanText] = useState(String(beamInput.spanLength));
-
-  useEffect(() => {
-    setSpanText(String(beamInput.spanLength));
-  }, [beamInput.spanLength]);
-
-  function handleSpanChange(text: string) {
-    setSpanText(text);
-    const parsed = Number(text);
-    if (Number.isFinite(parsed) && parsed > 0) {
-      updateSpanLength(parsed);
-    }
-  }
-
-  function handleSpanBlur() {
-    const parsed = Number(spanText);
-    if (!Number.isFinite(parsed) || parsed <= 0) {
-      setSpanText(String(beamInput.spanLength));
-    }
-  }
-
   return (
     <div className="space-y-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -86,13 +64,12 @@ export function BeamBuilder({
 
       <label className={labelClass + " max-w-xs"}>
         Span length A—B (m)
-        <input
-          type="number"
+        <NumberInput
           className={inputClass}
-          value={spanText}
+          value={beamInput.spanLength}
+          onChange={updateSpanLength}
+          isValid={(n) => n > 0}
           min={0.1}
-          onChange={(e) => handleSpanChange(e.target.value)}
-          onBlur={handleSpanBlur}
         />
       </label>
 
@@ -138,29 +115,26 @@ export function BeamBuilder({
             <div className="grid grid-cols-3 gap-4">
               <label className={labelClass}>
                 Width b
-                <input
-                  type="number"
+                <NumberInput
                   className={inputClass}
                   value={beamInput.section.width_mm}
-                  onChange={(e) => updateSection({ width_mm: Number(e.target.value) })}
+                  onChange={(width_mm) => updateSection({ width_mm })}
                 />
               </label>
               <label className={labelClass}>
                 Overall depth h
-                <input
-                  type="number"
+                <NumberInput
                   className={inputClass}
                   value={beamInput.section.depth_mm}
-                  onChange={(e) => updateSection({ depth_mm: Number(e.target.value) })}
+                  onChange={(depth_mm) => updateSection({ depth_mm })}
                 />
               </label>
               <label className={labelClass}>
                 Cover
-                <input
-                  type="number"
+                <NumberInput
                   className={inputClass}
                   value={beamInput.section.cover_mm}
-                  onChange={(e) => updateSection({ cover_mm: Number(e.target.value) })}
+                  onChange={(cover_mm) => updateSection({ cover_mm })}
                 />
               </label>
             </div>
@@ -171,29 +145,26 @@ export function BeamBuilder({
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               <label className={labelClass}>
                 Concrete {beamInput.designCode === "EC2" ? "fck" : "fcu"}
-                <input
-                  type="number"
+                <NumberInput
                   className={inputClass}
                   value={beamInput.fck}
-                  onChange={(e) => updateField("fck", Number(e.target.value))}
+                  onChange={(v) => updateField("fck", v)}
                 />
               </label>
               <label className={labelClass}>
                 Steel fyk
-                <input
-                  type="number"
+                <NumberInput
                   className={inputClass}
                   value={beamInput.fyk}
-                  onChange={(e) => updateField("fyk", Number(e.target.value))}
+                  onChange={(v) => updateField("fyk", v)}
                 />
               </label>
               <label className={labelClass}>
                 Applied torsion T_Ed (kNm)
-                <input
-                  type="number"
+                <NumberInput
                   className={inputClass}
                   value={beamInput.torsion}
-                  onChange={(e) => updateField("torsion", Number(e.target.value))}
+                  onChange={(v) => updateField("torsion", v)}
                 />
               </label>
             </div>
